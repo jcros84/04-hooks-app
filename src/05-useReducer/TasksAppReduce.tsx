@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 
 import { Plus, Trash2, Check } from 'lucide-react';
 
@@ -6,59 +6,38 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getInitialTaskState, taskReducer } from './reducer/taskReducer';
 
-interface Todo {
-  id: number;
-  text: string;
-  completed: boolean;
-}
 
-export const TasksApp = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+//Version del tASKaPP USANDO EL tasKReducer
+export const TasksAppReduce = () => {
+  //const [todos, setTodos] = useState<Todo[]>([]);
   const [inputValue, setInputValue] = useState('');
+  //desestructuramos el stado y las funcion dispatch que nos devuelve el reducer
+  const [state, dispatch] = useReducer(taskReducer, getInitialTaskState());
+
+  //Creamos un useEfefect para guardar los objetos en el localStorage del navegaro
+
+  useEffect(() => {
+    localStorage.setItem('task-state', JSON.stringify(state));
+
+  }, [state])
+
 
   const addTodo = () => {
-    console.log('Agregar tarea', inputValue);
+
     if (inputValue.length === 0) return;
 
-    const newTodo: Todo = {
-      id: Date.now(),
-      text: inputValue.trim(),
-      completed: false,
-    }
-    //aqui añadimos la nueva tarea al array existente, hacemos el spread antes para añadir al final la nueva
-    setTodos([...todos, newTodo]);
+    dispatch({ type: 'ADD_TODO', payload: inputValue });
     setInputValue('');
   };
 
   const toggleTodo = (id: number) => {
-    //console.log('Cambiar de true a false', id);
-    /* const todoDone: Todo = todos.filter((todo) => todo.id === id);
-    const newTodo: Todo = {
-      id: todoDone.id,
-      text: todoDone.text,
-      completed: true,
-    }
-    deleteTodo(todoDone.id);
-    setTodos([...todos, newTodo]); */
-    //recorremos con un mapa los elementos, en cuanto encuentra el que coincide cambia el valor de completed al contrario del valora actual
-    const updatedTodos = todos.map((todo) => {
-      if (todo.id === id) {
-        return { ...todo, completed: !todo.completed };
-      }
-      return todo;
-    })
-    //Hacemos el set para actualizar la vista
-    setTodos(updatedTodos);
-
+    dispatch({ type: 'TOGGLE_TODO', payload: id });
   };
 
   const deleteTodo = (id: number) => {
-    //console.log('Eliminar tarea', id);
-    //cogemos todo el array actual filtramos todos menos el recibido por parametro, despues hacemos set desacrtando este último
-    const updateTodos = todos.filter((todo) => todo.id !== id);
-    setTodos(updateTodos);
-
+    dispatch({ type: 'DELETE_TODO', payload: id });
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -67,9 +46,11 @@ export const TasksApp = () => {
     if (e.key === 'Enter') { addTodo() }
 
   };
+  //Creamos esta variable con los todos para usarla en el componenete mas abajo, renombramos ciertas propiedades para no refactorizar
+  const { todos, completed: completedCount, length: totalCount } = state;
 
-  const completedCount = todos.filter((todo) => todo.completed).length;
-  const totalCount = todos.length;
+  // const completedCount = todos.filter((todo) => todo.completed).length;
+  // const totalCount = todos.length;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4">
