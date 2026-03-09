@@ -1,11 +1,13 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 
 //import { HooksApp } from './HooksApp'
 
-import './index.css'
+import "./index.css";
 // import { TasksApp } from './05-useReducer/TasksApp'
-import { TasksAppReduce } from './05-useReducer/TasksAppReduce'
+// import { TasksAppReduce } from './05-useReducer/TasksAppReduce'
+// import { ScrambleWordsUseState } from './05-useReducer/ScrambleWords'
+import { ScrambleWords } from "./05-useReducer/ScrambleWords";
 //import { TrafficLight } from './01-useState/TrafficLight'
 // import { TrafficLightWithEffect } from './02-useEffect/TrafficLightWithEffect'
 // import { TrafficLightWithHook } from './02-useEffect/TrafficLightWithHook'
@@ -13,8 +15,7 @@ import { TasksAppReduce } from './05-useReducer/TasksAppReduce'
 // import { FocusScreen } from './04-useRef/FocusScreen'
 //import { NavBar } from './navbar'
 
-
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     {/* <HooksApp /> */}
     {/* <TrafficLight /> */}
@@ -25,6 +26,8 @@ createRoot(document.getElementById('root')!).render(
     {/* <FocusScreen /> */}
 
     {/* <TasksApp /> */}
-    <TasksAppReduce />
-  </StrictMode>
-)
+    {/* <TasksAppReduce /> */}
+    {/* <ScrambleWords /> */}
+    <ScrambleWords />
+  </StrictMode>,
+);
