@@ -2,7 +2,7 @@
 // Es necesario componentes de Shadcn/ui
 // https://ui.shadcn.com/docs/installation/vite
 
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,80 +30,28 @@ export const ScrambleWords = () => {
     scrambledWord,
     totalWords,
   } = state;
-  // const [words, setWords] = useState(shuffleArray(GAME_WORDS));
 
-  // const [currentWord, setCurrentWord] = useState(words[0]);
-  // const [scrambledWord, setScrambledWord] = useState(scrambleWord(currentWord));
-  // const [guess, setGuess] = useState("");
-  // const [points, setPoints] = useState(0);
-  // const [errorCounter, setErrorCounter] = useState(0);
-  // const [maxAllowErrors, setMaxAllowErrors] = useState(3);
-
-  // const [skipCounter, setSkipCounter] = useState(0);
-  // const [maxSkips, setMaxSkips] = useState(3);
-
-  // const [isGameOver, setIsGameOver] = useState(false);
+  useEffect(() => {
+    if (points === 0) return;
+    confetti({
+      particleCount: 200,
+      spread: 120,
+      origin: { y: 0.6 },
+    });
+  }, [points]);
 
   const handleGuessSubmit = (e: React.FormEvent) => {
-    /* // Previene el refresh de la página
+    // Previene el refresh de la página
     e.preventDefault();
-    // Implementar lógica de juego
-    //console.log("Intento de adivinanza:", guess, currentWord);
-
-    if (points === 17) return;
-    if (guess === currentWord) {
-      confetti({
-        particleCount: 200,
-        spread: 120,
-        origin: { y: 0.6 },
-      });
-
-      //cuando acierta quitamos la primera palabra del array para que no se vuelva a repetir
-      const newWords = words.slice(1);
-      //console.log("Acierto");
-      setPoints(points + 1);
-      setGuess("");
-      setWords(newWords);
-      setCurrentWord(newWords[0]);
-      setScrambledWord(scrambleWord(newWords[0]));
-      return;
-    } else {
-      setErrorCounter(errorCounter + 1);
-      setGuess("");
-      if (errorCounter + 1 >= maxAllowErrors) {
-        setIsGameOver(true);
-      }
-    } */
+    dispatch({ type: "GAME_CHECK_WORD" });
   };
 
   const handleSkip = () => {
-    /* console.log("Palabra saltada");
-    if (skipCounter >= maxSkips) {
-      console.log("no se puede sartar debes reiniciar Juego");
-      setIsGameOver(true);
-      return;
-    } else {
-      const newWords = words.slice(1);
-      setSkipCounter(skipCounter + 1);
-      setGuess("");
-      setWords(newWords);
-      setCurrentWord(newWords[0]);
-      setScrambledWord(scrambleWord(newWords[0]));
-    } */
+    dispatch({ type: "GAME_SKIP" });
   };
 
   const handlePlayAgain = () => {
-    /* console.log("Jugar de nuevo");
-    setSkipCounter(0);
-    setErrorCounter(0);
-    setIsGameOver(false);
-    setPoints(0);
-    setGuess("");
-    setWords(shuffleArray(GAME_WORDS));
-    setCurrentWord(words[0]);
-    setScrambledWord(scrambleWord(currentWord));
-    setMaxAllowErrors(3);
-    setMaxSkips(3); */
+    dispatch({ type: "GAME_RESET", payload: getInitialState() });
   };
 
   //! Si ya no hay palabras para jugar, se muestra el mensaje de fin de juego
@@ -183,9 +131,15 @@ export const ScrambleWords = () => {
                     id="guess"
                     type="text"
                     value={guess}
-                    onChange={(e) =>
+                    onChange={
+                      (e) =>
+                        // se llama a la funcion del reducer
+                        dispatch({
+                          type: "GAME_SET_GUESS",
+                          payload: e.target.value,
+                        })
                       // setGuess(e.target.value.toUpperCase().trim())
-                      console.log(e.target.value)
+                      //console.log(e.target.value)
                     }
                     placeholder="Ingresa tu palabra..."
                     className="text-center text-lg font-semibold h-12 border-2 border-indigo-200 focus:border-indigo-500 transition-colors"
