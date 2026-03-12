@@ -4,10 +4,12 @@ import { createRoot } from "react-dom/client";
 //import { HooksApp } from './HooksApp'
 
 import "./index.css";
+// import { MemoHook } from "./06-memos/MemoHook";
+import { MemoCounter } from "./06-memos/MemoCounter";
 // import { TasksApp } from './05-useReducer/TasksApp'
 // import { TasksAppReduce } from './05-useReducer/TasksAppReduce'
 // import { ScrambleWordsUseState } from './05-useReducer/ScrambleWords'
-import { ScrambleWords } from "./05-useReducer/ScrambleWords";
+// import { ScrambleWords } from "./05-useReducer/ScrambleWords";
 //import { TrafficLight } from './01-useState/TrafficLight'
 // import { TrafficLightWithEffect } from './02-useEffect/TrafficLightWithEffect'
 // import { TrafficLightWithHook } from './02-useEffect/TrafficLightWithHook'
@@ -24,10 +26,11 @@ createRoot(document.getElementById("root")!).render(
     {/* <NavBar /> */}
     {/* <PokemonPage /> */}
     {/* <FocusScreen /> */}
-
     {/* <TasksApp /> */}
     {/* <TasksAppReduce /> */}
     {/* <ScrambleWords /> */}
-    <ScrambleWords />
+    {/* <ScrambleWords /> */}
+    {/* <MemoHook /> */}
+    <MemoCounter />
   </StrictMode>,
 );
